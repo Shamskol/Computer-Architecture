@@ -74,20 +74,15 @@ class CPU:
     def run(self):
         """Run the CPU."""
         running = True
-        LDI = 0b10000010
-        PRN = 0b01000111
-        HALT = 0b00000001
-        ADD = 0b10101000
-        MUL = 0b10100010
-        PUSH = 0b01000101
-        POP = 0b01000110
-        CALL = 0b01010000
-        RET = 0b01010000
-        CMP = 0b10100111
-        JEQ = 0b10100111
-        JMP = 0b01010100
-        JNE = 0b01010110
-        
+        LDI = 0b10000010 # 130
+        PRN = 0b01000111 # 71
+        HALT = 0b00000001 # 1
+        ADD = 0b10101000 # 168
+        MUL = 0b10100010 # 162
+        PUSH = 0b01000101 # 69
+        POP = 0b01000110 # 70
+        CALL = 0b01010000 # 80
+       
         while running:
             instruction = self.ram_read(self.pc)
             operand_a = self.ram_read(self.pc + 1)
