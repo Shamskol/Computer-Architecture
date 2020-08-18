@@ -7,7 +7,12 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.pc = 0
+        self.ram = [0] * 255
+        self.reg = [0] * 8
+        self.sp = 7
+        
+
 
     def load(self):
         """Load a program into memory."""
@@ -29,6 +34,12 @@ class CPU:
         for instruction in program:
             self.ram[address] = instruction
             address += 1
+    def ram_read(self, MAR):
+        return self.ram[MAR]
+
+    def ram_write(self, MAR, MAD):
+        self.ram[MAR] = MAD
+        
 
 
     def alu(self, op, reg_a, reg_b):
@@ -62,4 +73,57 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        running = True
+        LDI = 0b10000010
+        PRN = 0b01000111
+        HALT = 0b00000001
+        ADD = 0b10101000
+        MUL = 0b10100010
+        PUSH = 0b01000101
+        POP = 0b01000110
+        CALL = 0b01010000
+        RET = 0b01010000
+        CMP = 0b10100111
+        JEQ = 0b10100111
+        JMP = 0b01010100
+        JNE = 0b01010110
+        
+        while running:
+            instruction = self.ram_read(self.pc)
+            operand_a = self.ram_read(self.pc + 1)
+            operand_b = self.ram_read(self.pc + 2)
+            increment = (instruction >> 6) + 1
+            print("Increment",increment)
+            if instruction == LDI:
+                print("LDI", operand_b)
+                self.reg[operand_a] = operand_b
+                self.pc += increment
+            elif instruction == PRN:
+                print(self.reg[operand_a])
+                self.pc += increment
+            elif instruction == HALT:
+                running = False
+            elif instruction == ADD:
+                self.alu("ADD", operand_a, operand_b)
+                self.pc += increment
+            elif instruction == MUL:
+                self.alu("MUL", operand_a, operand_b)
+                self.pc += increment
+            elif instruction == PUSH:
+                self.sp -= 1
+                value = self.reg[operand_a]
+                self.ram_write(self.sp, value)
+                self.pc += increment
+            elif instruction == POP:
+                print("pop")
+                value = self.ram_read(self.sp)
+                self.reg[operand_a] = value
+                self.sp += 1
+                self.pc += increment
+            elif instruction == CALL:
+                print("call")
+                print(self.ram[self.sp])
+                self.ram[self.sp] = increment
+                print(self.ram[self.sp])
+
+                self.pc = operand_a
