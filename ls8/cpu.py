@@ -18,14 +18,6 @@ class CPU:
         self.reg[self.sp] = 244
         self.op_size = 0
 
-
-
-    
-
-
-    
-          
-
     def load(self):
         """Load a program into memory."""
         try:   
@@ -58,10 +50,6 @@ class CPU:
         except FileNotFoundError:
             print(f"{sys.argv[0]}: {sys.argv[1]} not found!")
             sys.exit(2)
-
-         
-
-        
 
 
     def alu(self, op, reg_a, reg_b):
