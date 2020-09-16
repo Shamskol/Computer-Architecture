@@ -111,15 +111,23 @@ class CPU:
 
                 self.op_size = 3
             elif ir == PUSH:
+                #Get the reg num to push
                 index_of_register = self.ram[self.pc + 1]
+                # Get the value to push
                 val = self.reg[index_of_register] 
+                #Decrement the sp
                 self.reg[self.sp] -=1
+                # Copy the value to the sp address
                 self.ram[self.reg[self.sp]] = val
                 self.op_size = 2
             elif ir == POP:
+                # Get the reg to pop into
                 index_of_the_register = self.ram[self.pc + 1]
+                # Get the value at the top of the stack
                 val = self.ram[self.reg[self.sp]]
+                # Store the value in the register
                 self.reg[index_of_the_register] = val 
+                # Increment the sp
                 self.reg[self.sp] += 1 
                 self.op_size = 2    
 
