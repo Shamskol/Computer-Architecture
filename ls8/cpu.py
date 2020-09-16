@@ -3,6 +3,8 @@ HLT = 0b00000001
 LDI = 0b10000010
 PRN = 0b01000111
 MUL = 0b10100010
+PUSH = 0b01000101
+POP = 0b01000110
 import sys
 
 class CPU:
@@ -106,7 +108,22 @@ class CPU:
                 self.op_size = 2
             elif ir == MUL:
                 self.alu("MUL", reg_num1, reg_num2)
+
                 self.op_size = 3
+            elif ir == PUSH:
+                index_of_register = self.ram[self.pc + 1]
+                val = self.reg[index_of_register] 
+                self.reg[self.sp] -=1
+                self.ram[self.reg[self.sp]] = val
+                self.op_size = 2
+            elif ir == POP:
+                index_of_the_register = self.ram[self.pc + 1]
+                val = self.ram[self.reg[self.sp]]
+                self.reg[index_of_the_register] = val 
+                self.reg[self.sp] += 1 
+                self.op_size = 2    
+
+
             else: 
                 print(f"Invalid Instruction: {ir:b}")
                 self.running = False
