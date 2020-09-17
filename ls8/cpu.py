@@ -5,6 +5,9 @@ PRN = 0b01000111
 MUL = 0b10100010
 PUSH = 0b01000101
 POP = 0b01000110
+CALL = 0b01010000
+RET = 0b00010001
+ADD = 0b10100000
 import sys
 
 class CPU:
@@ -129,8 +132,24 @@ class CPU:
                 self.reg[index_of_the_register] = val 
                 # Increment the sp
                 self.reg[self.sp] += 1 
-                self.op_size = 2    
+                self.op_size = 2 
+            elif ir == CALL:
+                self.reg[self.sp] -=1
+                self.ram[self.reg[self.sp]] = self.pc + 2
+                index_of_register = self.ram[self.pc + 1]
+                self.pc = self.reg[index_of_register]
+            
+                self.op_size = 0
+            elif ir == RET:
+                self.pc = self.ram[self.reg[self.sp]]
+                self.reg[self.sp] += 1
+                self.op_size =0
+            elif ir== ADD:
+                self.reg[reg_num1] += self.reg[reg_num2]
+                self.op_size += 3 
 
+
+            
 
             else: 
                 print(f"Invalid Instruction: {ir:b}")
